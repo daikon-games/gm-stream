@@ -40,8 +40,14 @@ function GmStream(_data) constructor {
 /// @param dataStructure A data-structure to be streamed
 /// @return a GmStream of the given data structure
 function stream_of(dataStructure) {
-	if (ds_exists(dataStructure, ds_type_list)) {
+	if (is_array(dataStructure)) {
+		var data = ds_list_create();
+		for (var i = 0; i < array_length(dataStructure); i++) {
+			ds_list_add(data, dataStructure[i]);
+		}
+		return new GmStream(data);
+	} else if (ds_exists(dataStructure, ds_type_list)) {
 		return new GmStream(dataStructure);
-	}
+	} 
 }
 

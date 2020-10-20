@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"font_test","path":"fonts/font_test/font_test.yy",},"order":2,},
     {"id":{"name":"obj_tests","path":"objects/obj_tests/obj_tests.yy",},"order":1,},
     {"id":{"name":"scr_gmstream","path":"scripts/scr_gmstream/scr_gmstream.yy",},"order":0,},
     {"id":{"name":"test_suite","path":"rooms/test_suite/test_suite.yy",},"order":0,},
