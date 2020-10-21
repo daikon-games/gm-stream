@@ -26,6 +26,16 @@ function GmStream(_data) constructor {
 		return self;
 	}
 	
+	filter = function(filterFunction) {
+		for (var i = ds_list_size(data); i >= 0; i--) {
+			var item = data[| i];
+			if (!filterFunction(item)) {
+				ds_list_delete(data, i);
+			}
+		}
+		return self;
+	}
+	
 	/// Terminal operations
 	/// These all return some type of desired result, and call our clean_up method to finish
 	collectAsList = function() {
@@ -33,6 +43,12 @@ function GmStream(_data) constructor {
 		ds_list_copy(result, data);
 		self.clean_up();
 		return result; 
+	}
+	
+	count = function() {
+		var result = ds_list_size(data);
+		self.clean_up();
+		return result;
 	}
 }
 

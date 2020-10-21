@@ -36,7 +36,7 @@ function testArrayToStream() {
 };
 
 function testStreamDistinctCollectList() {
-	var testName = "Stream, Make Distinct, Collect to List";
+	var testName = "Make Distinct & Collect to List";
 	
 	var initialArray = ["A", "B", "B", "C"];
 
@@ -53,10 +53,43 @@ function testStreamDistinctCollectList() {
 	return new TestResult(testName, true, "");
 };
 
+function testStreamCount() {
+	var testName = "Count";
+	
+	var initialArray = ["A", "B", "C"];
+	
+	var count = stream_of(initialArray)
+				.count();
+	if (count != 3) {
+		return new TestResult(testName, false, "element count was incorrect");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testFilter() {
+	var testName = "Filter";
+	var initialArray = ["A", "B", "C", "D", "A"];
+	
+	var result = stream_of(initialArray)
+				.filter(function(item) {
+					return item == "A";
+				})
+				.collectAsList();
+	if (ds_list_size(result) != 2) {
+		return new TestResult(testName, false, "expected only two items to remain after filter");
+	}
+	if (result[| 0] != "A" || result[| 1] != "A") {
+		return new TestResult(testName, false, "expected all items remaining to be 'A'");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
 // Run the test suite, print out the results
 totalCount = 0;
 failedCount = 0;
-testSuite = [testListToStream, testArrayToStream, testStreamDistinctCollectList];
+testSuite = [testListToStream, testArrayToStream, testStreamDistinctCollectList, testStreamCount, testFilter];
 show_debug_message("\nBeginning test suite\n");
 for (var i = 0; i < array_length(testSuite); i++) {
 	var test = testSuite[i];
