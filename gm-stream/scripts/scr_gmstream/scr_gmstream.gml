@@ -28,7 +28,7 @@ function GmStream(_data) constructor {
 	
 	/// Terminal operations
 	/// These all return some type of desired result, and call our clean_up method to finish
-	collectAsList = function(collector) {
+	collectAsList = function() {
 		var result = ds_list_create();
 		ds_list_copy(result, data);
 		self.clean_up();
