@@ -35,7 +35,7 @@ function testArrayToStream() {
 	return new TestResult(testName, true, "");
 };
 
-function testStreamCollectList() {
+function testCollectList() {
 	var testName = "Collect to List";
 	
 	var initialArray = ["A", "B", "C"];
@@ -52,7 +52,7 @@ function testStreamCollectList() {
 	return new TestResult(testName, true, "");
 };
 
-function testStreamCollectArray() {
+function testCollectArray() {
 	var testName = "Collect to Array";
 	
 	var initialList = ds_list_create();
@@ -72,7 +72,7 @@ function testStreamCollectArray() {
 	return new TestResult(testName, true, "");
 };
 
-function testStreamDistinct() {
+function testDistinct() {
 	var testName = "Make Distinct";
 	
 	var initialArray = ["A", "B", "B", "C"];
@@ -141,10 +141,75 @@ function testMap() {
 	return new TestResult(testName, true, "");
 }
 
+function testAllMatchTrue() {
+	var testName = "All Match Positive Case";
+	var initialArray = ["A", "A", "A"];
+	
+	var matchFunction = function(item) {
+		return string_lower(item) == "a";
+	}
+	var result = stream_of(initialArray)
+					.allMatch(matchFunction);
+	if (result != true) {
+		return new TestResult(testName, false, "expected all items to match the match function");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testAllMatchFalse() {
+	var testName = "All Match Negative Case";
+	var initialArray = ["A", "B", "A"];
+	
+	var matchFunction = function(item) {
+		return string_lower(item) == "a";
+	}
+	var result = stream_of(initialArray)
+					.allMatch(matchFunction);
+	if (result == true) {
+		return new TestResult(testName, false, "expected one item to not match the match function");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testAnyMatchTrue() {
+	var testName = "Any Match Positive Case";
+	var initialArray = ["C", "B", "A"];
+	
+	var matchFunction = function(item) {
+		return string_lower(item) == "a";
+	}
+	var result = stream_of(initialArray)
+					.anyMatch(matchFunction);
+	if (result != true) {
+		return new TestResult(testName, false, "expected at least one item to match the match function");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testAnyMatchFalse() {
+	var testName = "Any Match Negative Case";
+	var initialArray = ["B", "C", "D"];
+	
+	var matchFunction = function(item) {
+		return string_lower(item) == "a";
+	}
+	var result = stream_of(initialArray)
+					.anyMatch(matchFunction);
+	if (result == true) {
+		return new TestResult(testName, false, "expected no items to match the match function");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
 // Run the test suite, print out the results
 totalCount = 0;
 failedCount = 0;
-testSuite = [testListToStream, testArrayToStream, testStreamCollectList, testStreamCollectArray, testStreamDistinct, testCount, testFilter, testMap];
+testSuite = [testListToStream, testArrayToStream, testCollectList, testCollectArray, testDistinct, testCount, testFilter, testMap, testAllMatchTrue, testAllMatchFalse,
+			 testAnyMatchTrue, testAnyMatchFalse];
 show_debug_message("\nBeginning test suite\n");
 for (var i = 0; i < array_length(testSuite); i++) {
 	var test = testSuite[i];

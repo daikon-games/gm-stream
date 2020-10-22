@@ -46,11 +46,30 @@ function GmStream(_data) constructor {
 	
 	/// Terminal operations
 	/// These all return some type of desired result, and call our clean_up method to finish
-	collectAsList = function() {
-		var result = ds_list_create();
-		ds_list_copy(result, data);
+	allMatch = function(matchFunction) {
+		var result = true;
+		for (var i = 0; i < ds_list_size(data); i++) {
+			var item = data[| i];
+			if (!matchFunction(item)) {
+				result = false;
+				break;
+			}
+		}
 		self.clean_up();
-		return result; 
+		return result;
+	}
+	
+	anyMatch = function(matchFunction) {
+		var result = false;
+		for (var i = 0; i < ds_list_size(data); i++) {
+			var item = data[| i];
+			if (matchFunction(item)) {
+				result = true;
+				break;
+			}
+		}
+		self.clean_up();
+		return result;
 	}
 	
 	collectAsArray = function() {
@@ -61,6 +80,13 @@ function GmStream(_data) constructor {
 		}
 		self.clean_up();
 		return result;
+	}
+	
+	collectAsList = function() {
+		var result = ds_list_create();
+		ds_list_copy(result, data);
+		self.clean_up();
+		return result; 
 	}
 	
 	count = function() {
