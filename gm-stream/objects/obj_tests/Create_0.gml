@@ -87,7 +87,7 @@ function testStreamDistinct() {
 	return new TestResult(testName, true, "");
 };
 
-function testStreamCount() {
+function testCount() {
 	var testName = "Count";
 	
 	var initialArray = ["A", "B", "C"];
@@ -105,10 +105,12 @@ function testFilter() {
 	var testName = "Filter";
 	var initialArray = ["A", "B", "C", "D", "A"];
 	
+	var filterFunction = function(item) {
+		return item == "A";	
+	};
+	
 	var result = stream_of(initialArray)
-				.filter(function(item) {
-					return item == "A";
-				})
+				.filter(filterFunction)
 				.collectAsList();
 	if (ds_list_size(result) != 2) {
 		return new TestResult(testName, false, "expected only two items to remain after filter");
@@ -142,7 +144,7 @@ function testMap() {
 // Run the test suite, print out the results
 totalCount = 0;
 failedCount = 0;
-testSuite = [testListToStream, testArrayToStream, testStreamCollectList, testStreamCollectArray, testStreamDistinct, testStreamCount, testFilter, testMap];
+testSuite = [testListToStream, testArrayToStream, testStreamCollectList, testStreamCollectArray, testStreamDistinct, testCount, testFilter, testMap];
 show_debug_message("\nBeginning test suite\n");
 for (var i = 0; i < array_length(testSuite); i++) {
 	var test = testSuite[i];
