@@ -36,6 +36,14 @@ function GmStream(_data) constructor {
 		return self;
 	}
 	
+	map = function(mapFunction) {
+		for (var i = ds_list_size(data); i >= 0; i--) {
+			var item = data[| i];
+			data[| i] = mapFunction(item);
+		}
+		return self;
+	}
+	
 	/// Terminal operations
 	/// These all return some type of desired result, and call our clean_up method to finish
 	collectAsList = function() {
@@ -43,6 +51,16 @@ function GmStream(_data) constructor {
 		ds_list_copy(result, data);
 		self.clean_up();
 		return result; 
+	}
+	
+	collectAsArray = function() {
+		var listSize = ds_list_size(data);
+		var result = array_create(listSize);
+		for (var i = 0; i < listSize; i++) {
+			result[i] = data[| i];
+		}
+		self.clean_up();
+		return result;
 	}
 	
 	count = function() {
@@ -64,6 +82,6 @@ function stream_of(dataStructure) {
 		return new GmStream(data);
 	} else if (ds_exists(dataStructure, ds_type_list)) {
 		return new GmStream(dataStructure);
-	} 
+	}
 }
 
