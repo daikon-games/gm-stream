@@ -205,11 +205,81 @@ function testAnyMatchFalse() {
 	return new TestResult(testName, true, "");
 }
 
+function testForEach() {
+	var testName = "For Each";
+	var initialArray = ["A", "B", "C"];
+	
+	seenCount = 0;
+	var forEachFunction = function(item) {
+		seenCount += 1;
+	}
+	stream_of(initialArray)
+		.forEach(forEachFunction);
+	if (seenCount != 3) {
+		return new TestResult(testName, false, "expected the forEach function to run on each item");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testCollectJoining() {
+	var testName = "Collect Joining";
+	var initialArray = ["A", "B", "C"];
+	
+	var result = stream_of(initialArray)
+					.collectJoining();
+	if (result != "ABC") {
+		return new TestResult(testName, false, "expected the result to be a string of the items concatenated");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testCollectJoiningDelimiter() {
+	var testName = "Collect Joining with Delimiter";
+	var initialArray = ["A", "B", "C"];
+	
+	var result = stream_of(initialArray)
+					.collectJoining(",");
+	if (result != "A,B,C") {
+		return new TestResult(testName, false, "expected the result to be a string of the items joined with commas");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testCollectJoiningDelimiterPrefix() {
+	var testName = "Collect Joining with Delimiter and Prefix";
+	var initialArray = ["A", "B", "C"];
+	
+	var result = stream_of(initialArray)
+					.collectJoining(",", ">");
+	if (result != ">A,B,C") {
+		return new TestResult(testName, false, "expected the result to be a string of the items joined with commas and prefixed");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testCollectJoiningDelimiterPrefixSuffix() {
+	var testName = "Collect Joining with Delimiter, Prefix, and Suffix";
+	var initialArray = ["A", "B", "C"];
+	
+	var result = stream_of(initialArray)
+					.collectJoining(",", "[", "]");
+	if (result != "[A,B,C]") {
+		return new TestResult(testName, false, "expected the result to be a string of the items joined with commas and prefixed/suffixed");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
 // Run the test suite, print out the results
 totalCount = 0;
 failedCount = 0;
 testSuite = [testListToStream, testArrayToStream, testCollectList, testCollectArray, testDistinct, testCount, testFilter, testMap, testAllMatchTrue, testAllMatchFalse,
-			 testAnyMatchTrue, testAnyMatchFalse];
+			 testAnyMatchTrue, testAnyMatchFalse, testForEach, testCollectJoining, testCollectJoiningDelimiter, testCollectJoiningDelimiterPrefix, 
+			 testCollectJoiningDelimiterPrefixSuffix];
 show_debug_message("\nBeginning test suite\n");
 for (var i = 0; i < array_length(testSuite); i++) {
 	var test = testSuite[i];

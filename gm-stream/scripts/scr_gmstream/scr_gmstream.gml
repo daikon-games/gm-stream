@@ -89,10 +89,42 @@ function GmStream(_data) constructor {
 		return result; 
 	}
 	
+	collectJoining = function(delimiter, prefix, suffix) {
+		var result = "";
+		
+		if (!is_undefined(prefix)) {
+			result += prefix;
+		}
+		
+		var listSize = ds_list_size(data);
+		for (var i = 0; i < listSize; i++) {
+			var item = data[| i];
+			result += string(item);
+			if (!is_undefined(delimiter) && i != listSize - 1) {
+				result += delimiter;
+			}
+		}
+		
+		if (!is_undefined(suffix)) {
+			result += suffix;
+		}
+		
+		self.clean_up();
+		return result;
+	}
+	
 	count = function() {
 		var result = ds_list_size(data);
 		self.clean_up();
 		return result;
+	}
+	
+	forEach = function(forEachFunction) {
+		for (var i = 0; i < ds_list_size(data); i++) {
+			var item = data[| i];
+			forEachFunction(item);
+		}
+		self.clean_up();
 	}
 }
 
