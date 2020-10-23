@@ -44,6 +44,19 @@ function GmStream(_data) constructor {
 		return self;
 	}
 	
+	sort = function(comparatorFunction) {
+		if (is_undefined(comparatorFunction) && isSorted == false) {
+			ds_list_sort(data, true);
+			isSorted = true;
+		} else {
+			// Don't check or set isSorted in this case as a new comparator function could re-sort us
+			var result = self.mergesort(data, comparatorFunction);
+			ds_list_copy(data, result);
+			ds_list_destroy(result);
+		}
+		return self;
+	}
+	
 	/// Terminal operations
 	/// These all return some type of desired result, and call our clean_up method to finish
 	allMatch = function(matchFunction) {
@@ -119,12 +132,68 @@ function GmStream(_data) constructor {
 		return result;
 	}
 	
+	findFirst = function() {
+		if (ds_list_size(data) == 0) {
+			return noone;
+		}
+		var result = data[| 0];
+		self.clean_up();
+		return result;
+	}
+	
 	forEach = function(forEachFunction) {
 		for (var i = 0; i < ds_list_size(data); i++) {
 			var item = data[| i];
 			forEachFunction(item);
 		}
 		self.clean_up();
+	}
+	
+	/// Helper methods
+	mergesort = function(list, comparatorFunction) {
+		var listSize = ds_list_size(list);
+		if (listSize <= 1) {
+			return list;
+		}
+		var halfSize = ceil(listSize/2);
+		var leftList = ds_list_create();
+		var rightList = ds_list_create();
+		
+		for (var i = 0; i < listSize; i++) {
+			if (i < halfSize) {
+				ds_list_add(leftList, list[| i]);
+			} else {
+				ds_list_add(rightList, list[| i]);
+			}
+		}
+		
+		leftList = self.mergesort(leftList, comparatorFunction);
+		rightList = self.mergesort(rightList, comparatorFunction);
+		
+		return self.merge(leftList, rightList, comparatorFunction);
+	}
+	merge = function(leftList, rightList, comparatorFunction) {
+		var result = ds_list_create();
+		var i = 0;
+		var j = 0;
+		
+		while (i < ds_list_size(leftList) && j < ds_list_size(rightList)) {
+			if (comparatorFunction(leftList[|i], rightList[|j]) < 1) {
+				ds_list_add(result, leftList[|i++]);
+			} else {
+				ds_list_add(result, rightList[|j++]);
+			}
+		}
+		while (i < ds_list_size(leftList)) {
+			ds_list_add(result, leftList[|i++]);
+		}
+		while (j < ds_list_size(rightList)) {
+			ds_list_add(result, rightList[|j++]);
+		}
+		ds_list_destroy(leftList);
+		ds_list_destroy(rightList);
+		
+		return result;
 	}
 }
 

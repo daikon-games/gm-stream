@@ -274,12 +274,95 @@ function testCollectJoiningDelimiterPrefixSuffix() {
 	return new TestResult(testName, true, "");
 }
 
+function testFindFirstEmpty() {
+	var testName = "Find First, empty Stream";
+	var initialArray = [];
+	
+	var result = stream_of(initialArray)
+					.findFirst();
+					
+	if (result != noone) {
+		return new TestResult(testName, false, "expected result of findFirst on empty stream to be noone");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testFindFirst() {
+	var testName = "Find First";
+	var initialArray = ["A", "B", "C"];
+	
+	var result = stream_of(initialArray)
+					.findFirst();
+					
+	if (result != "A") {
+		return new TestResult(testName, false, "expected result of findFirst to be A");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testSort() {
+	var testName = "Sort Simple";
+	var initialArray = ["C", "A", "B"];
+	
+	var result = stream_of(initialArray)
+					.sort()
+					.collectJoining();
+					
+	if (result != "ABC") {
+		return new TestResult(testName, false, "expected result to be sorted alphabetically");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testSortNumeric() {
+	var testName = "Sort Simple (Numeric)";
+	var initialArray = [3, 1, 20];
+	
+	var result = stream_of(initialArray)
+					.sort()
+					.collectJoining(",");
+					
+	if (result != "1,3,20") {
+		return new TestResult(testName, false, "expected result to be sorted numerically");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testSortComparator() {
+	var testName = "Sort with Comparator";
+	var initialArray = [{a: 1, b: "hello"}, {a: 3, b: "value"}, {a: 2, b: "another"}, {a: 0, b: "hey"}];
+	var comparator = function(o1, o2) {
+		if (o1.a < o2.a) {
+			return -1;
+		} else if (o1.a == o2.a) {
+			return 0;
+		} else {
+			return 1;
+		}
+	}
+	
+	var result = stream_of(initialArray)
+					.sort(comparator)
+					.map(function(item) { return item.a })
+					.collectJoining(",");
+					
+	if (result != "0,1,2,3") {
+		return new TestResult(testName, false, "expected comparator to correctly sort entries by property a.\n     actual: " + result);
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
 // Run the test suite, print out the results
 totalCount = 0;
 failedCount = 0;
 testSuite = [testListToStream, testArrayToStream, testCollectList, testCollectArray, testDistinct, testCount, testFilter, testMap, testAllMatchTrue, testAllMatchFalse,
 			 testAnyMatchTrue, testAnyMatchFalse, testForEach, testCollectJoining, testCollectJoiningDelimiter, testCollectJoiningDelimiterPrefix, 
-			 testCollectJoiningDelimiterPrefixSuffix];
+			 testCollectJoiningDelimiterPrefixSuffix, testFindFirstEmpty, testFindFirst, testSort, testSortNumeric, testSortComparator];
 show_debug_message("\nBeginning test suite\n");
 for (var i = 0; i < array_length(testSuite); i++) {
 	var test = testSuite[i];
