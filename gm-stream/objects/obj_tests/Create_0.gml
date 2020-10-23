@@ -357,12 +357,39 @@ function testSortComparator() {
 	return new TestResult(testName, true, "");
 }
 
+function testNoneMatchTrue() {
+	var testName = "None Match Positive Case";
+	var initialArray = ["A", "B", "C"];
+	
+	var predicateFunction = function(item) {
+		return item == "D";
+	}
+	var result = stream_of(initialArray)
+					.noneMatch(predicateFunction);
+					
+	return new TestResult(testName, result, "expected no items to match the predicate");
+}
+
+function testNoneMatchFalse() {
+	var testName = "None Match Negative Case";
+	var initialArray = ["A", "B", "C"];
+	
+	var predicateFunction = function(item) {
+		return item == "A";
+	}
+	var result = stream_of(initialArray)
+					.noneMatch(predicateFunction);
+					
+	return new TestResult(testName, !result, "expected some items to match the predicate");
+}
+
 // Run the test suite, print out the results
 totalCount = 0;
 failedCount = 0;
 testSuite = [testListToStream, testArrayToStream, testCollectList, testCollectArray, testDistinct, testCount, testFilter, testMap, testAllMatchTrue, testAllMatchFalse,
 			 testAnyMatchTrue, testAnyMatchFalse, testForEach, testCollectJoining, testCollectJoiningDelimiter, testCollectJoiningDelimiterPrefix, 
-			 testCollectJoiningDelimiterPrefixSuffix, testFindFirstEmpty, testFindFirst, testSort, testSortNumeric, testSortComparator];
+			 testCollectJoiningDelimiterPrefixSuffix, testFindFirstEmpty, testFindFirst, testSort, testSortNumeric, testSortComparator, testNoneMatchTrue, 
+			 testNoneMatchFalse];
 show_debug_message("\nBeginning test suite\n");
 for (var i = 0; i < array_length(testSuite); i++) {
 	var test = testSuite[i];

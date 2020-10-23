@@ -59,11 +59,11 @@ function GmStream(_data) constructor {
 	
 	/// Terminal operations
 	/// These all return some type of desired result, and call our clean_up method to finish
-	allMatch = function(matchFunction) {
+	allMatch = function(predicateFunction) {
 		var result = true;
 		for (var i = 0; i < ds_list_size(data); i++) {
 			var item = data[| i];
-			if (!matchFunction(item)) {
+			if (!predicateFunction(item)) {
 				result = false;
 				break;
 			}
@@ -72,11 +72,11 @@ function GmStream(_data) constructor {
 		return result;
 	}
 	
-	anyMatch = function(matchFunction) {
+	anyMatch = function(predicateFunction) {
 		var result = false;
 		for (var i = 0; i < ds_list_size(data); i++) {
 			var item = data[| i];
-			if (matchFunction(item)) {
+			if (predicateFunction(item)) {
 				result = true;
 				break;
 			}
@@ -147,6 +147,10 @@ function GmStream(_data) constructor {
 			forEachFunction(item);
 		}
 		self.clean_up();
+	}
+	
+	noneMatch = function(predicateFunction) {
+		return !self.anyMatch(predicateFunction);
 	}
 	
 	/// Helper methods
