@@ -41,6 +41,7 @@ function GmStream(_data) constructor {
 			var item = data[| i];
 			data[| i] = mapFunction(item);
 		}
+		isDistinct = false;
 		return self;
 	}
 	
