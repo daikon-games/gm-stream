@@ -1,4 +1,5 @@
 ## Meet gm-stream!
+![Header](images/header-wide.png)
 **gm-stream** provides a series of fluent APIs that can aid in performing powerful logic on data structures. gm-stream is heavily based on the concept of [Streams](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html) from the Java programming language, although it has been adapted to suit GameMaker Language.
 
 Use of **gm-stream** requires GameMaker 2.3 or higher, as it makes use of many of that release's new language functions.
