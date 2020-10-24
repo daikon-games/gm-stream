@@ -32,16 +32,16 @@ Once you have a `GmStream` instance you can manipulate it in a lot of different 
 A summary of all the available Intermediate and Terminal operations is below, but full descriptions of each with example code can be found in the [API Guide](API.md).
 
 ### Intermediate Operations
-#### [.distinct()](API.md#.distinct())
+#### [.distinct()](API.md#distinct)
 Removes all duplicate items from the stream
 
-#### [.filter(predicateFunction)](API.md#.filter(predicateFunction))
+#### [.filter(predicateFunction)](API.md#filterpredicatefunction)
 Removes items from the stream which match the provided predicate function
 
-#### [.map(mapFunction)](API.md#.map(mapFunction))
+#### [.map(mapFunction)](API.md#mapmapfunction)
 Applies the provied map function to each item in the stream
 
-#### [.sort([comparatorFunction])](API.md#.sort([comparatorFunction]))
+#### [.sort([comparatorFunction])](API.md#sortcomparatorFunction)
 Sorts the items in the stream according to the provided comparator function (optional).
 
 If no comparator function is provided it will perform a `ds_list_sort` in the ascending direction on the data.
@@ -49,31 +49,31 @@ This is appropriate for sorting a stream of Strings alphabetically or a stream o
 cases, providing a comparator yourself is recommended.
 
 ### Terminal Operations
-#### [.allMatch(predicateFunction)](API.md#.allMatch(predicateFunction))
+#### [.allMatch(predicateFunction)](API.md#allmatchpredicatefunction)
 Returns true if every item in the stream matches the provided predicate function, false if one or more items does not match.
 
-#### [.anyMatch(predicateFunction)](API.md#.anyMatch(predicateFunction))
+#### [.anyMatch(predicateFunction)](API.md#anymatchpredicatefunction)
 Returns true if one or more items in the stream match the provided predicate function, false if every item does not match it.
 
-#### [.collectAsArray()](API.md#.collectAsArray())
+#### [.collectAsArray()](API.md#collectasarray)
 Returns an array containing the items of the stream in their current order
 
-#### [.collectAsList()](API.md#.collectAsList())
+#### [.collectAsList()](API.md#collectaslist)
 Returns a `ds_list` containing the items of the stream in their current order
 
-#### [.collectJoining([delimiter], [prefix], [suffix])](API.md#.collectJoining([delimiter],-[prefix],-[suffix]))
+#### [.collectJoining([delimiter], [prefix], [suffix])](API.md#collectjoining-delimiter-prefix-suffix)
 Returns a string consisting of the items of the stream (passed through GameMaker's `string` function) concatenated.
 
 Optional parameters `delimiter`, `prefix`, and `suffix` allow for the items to be separated by the given delimiter, and the entire string to be prefixed and suffixed by the given prefix and suffix.
 
-#### [.count()](API.md#.count())
+#### [.count()](API.md#count)
 Returns the number of items in the stream
 
-#### [.findFirst()](API.md#.findFirst())
+#### [.findFirst()](API.md#findFirst)
 Returns the first item encountered in the stream, or `noone` if the stream is empty
 
-#### [.forEach(forEachFunction)](API.md#.forEach(forEachFunction))
+#### [.forEach(forEachFunction)](API.md#foreachforeachfunction)
 Executes the provided function across each item in the stream.
 
-#### [.noneMatch(predicateFunction)](API.md#.noneMatch(predicateFunction))
+#### [.noneMatch(predicateFunction)](API.md#nonematchpredicatefunction)
 Returns true if no items in the stream match the provided predicate function, false if one or more items do match it.
