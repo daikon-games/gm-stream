@@ -394,10 +394,8 @@ function testSortComparator() {
 	var testName = "Sort with Comparator";
 	var initialArray = [{a: 1, b: "hello"}, {a: 3, b: "value"}, {a: 2, b: "another"}, {a: 0, b: "hey"}];
 	var comparator = function(o1, o2) {
-		if (o1.a < o2.a) {
+		if (o1.a <= o2.a) {
 			return -1;
-		} else if (o1.a == o2.a) {
-			return 0;
 		} else {
 			return 1;
 		}

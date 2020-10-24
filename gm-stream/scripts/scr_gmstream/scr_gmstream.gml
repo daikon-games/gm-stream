@@ -183,7 +183,7 @@ function GmStream(_data) constructor {
 		var j = 0;
 		
 		while (i < ds_list_size(leftList) && j < ds_list_size(rightList)) {
-			if (comparatorFunction(leftList[|i], rightList[|j]) < 1) {
+			if (comparatorFunction(leftList[|i], rightList[|j]) <= 0) {
 				ds_list_add(result, leftList[|i++]);
 			} else {
 				ds_list_add(result, rightList[|j++]);
