@@ -61,7 +61,7 @@ Returns an array containing the items of the stream in their current order
 #### [.collectAsList()](API.md#collectaslist)
 Returns a `ds_list` containing the items of the stream in their current order
 
-#### [.collectJoining([delimiter], [prefix], [suffix])](API.md#collectjoining-delimiter-prefix-suffix)
+#### [.collectJoining([delimiter], [prefix], [suffix])](API.md#collectjoiningdelimiter-prefix-suffix)
 Returns a string consisting of the items of the stream (passed through GameMaker's `string` function) concatenated.
 
 Optional parameters `delimiter`, `prefix`, and `suffix` allow for the items to be separated by the given delimiter, and the entire string to be prefixed and suffixed by the given prefix and suffix.
