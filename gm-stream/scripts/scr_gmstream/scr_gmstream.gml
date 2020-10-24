@@ -207,13 +207,41 @@ function GmStream(_data) constructor {
 /// @return a GmStream of the given data structure
 function stream_of(dataStructure) {
 	if (is_array(dataStructure)) {
+		// Create a stream from an array
 		var data = ds_list_create();
 		for (var i = 0; i < array_length(dataStructure); i++) {
 			ds_list_add(data, dataStructure[i]);
 		}
 		return new GmStream(data);
 	} else if (ds_exists(dataStructure, ds_type_list)) {
-		return new GmStream(dataStructure);
+		// Create a stream from a ds_list
+		var data = ds_list_create();
+		ds_list_copy(data, dataStructure);
+		return new GmStream(data);
+	} else if (ds_exists(dataStructure, ds_type_queue)) {
+		// Create a stream from a ds_queue
+		var data = ds_list_create();
+		var tempQueue = ds_queue_create();
+		ds_queue_copy(tempQueue, dataStructure);
+		var item = ds_queue_dequeue(tempQueue);
+		while (!is_undefined(item)) {
+			ds_list_add(data, item);
+			item = ds_queue_dequeue(tempQueue);
+		}
+		ds_queue_destroy(tempQueue);
+		return new GmStream(data);
+	} else if (ds_exists(dataStructure, ds_type_stack)) {
+		// Create a stream from a ds_stack
+		var data = ds_list_create();
+		var tempStack = ds_stack_create();
+		ds_stack_copy(tempStack, dataStructure);
+		var item = ds_stack_pop(tempStack);
+		while (!is_undefined(item)) {
+			ds_list_add(data, item);
+			item = ds_stack_pop(tempStack);
+		}
+		ds_stack_destroy(tempStack);
+		return new GmStream(data);
 	}
 }
 

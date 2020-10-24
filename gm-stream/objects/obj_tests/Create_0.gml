@@ -9,18 +9,26 @@ function testListToStream() {
 	var testName = "List to stream";
 	
 	var initialList = ds_list_create();
-	ds_list_add(initialList, "A");
-	ds_list_add(initialList, "B");
-	ds_list_add(initialList, "C");
+	ds_list_add(initialList, "A", "B", "C");
 
 	var stream = stream_of(initialList);
 	if (is_undefined(stream)) {
 		return new TestResult(testName, false, "Returned stream did not exist");
 	}
-	stream.clean_up();
+	if (stream.count() != 3) {
+		return new TestResult(testName, false, "expected stream to contain as many elements as initial list");
+	}
+	
+	// Ensure that the initial data structure still exists
+	if (!ds_exists(initialList, ds_type_list)) {
+		return new TestResult(testName, false, "expected original list to still exist after stream cleanup");
+	}
+	
+	ds_list_destroy(initialList);
 	
 	return new TestResult(testName, true, "");
 };
+
 function testArrayToStream() {
 	var testName = "Array to stream";
 	
@@ -30,10 +38,60 @@ function testArrayToStream() {
 	if (is_undefined(stream)) {
 		return new TestResult(testName, false, "Returned stream did not exist");
 	}
-	stream.clean_up();
+	if (stream.count() != 3) {
+		return new TestResult(testName, false, "expected stream to contain as many elements as initial array");
+	}
 	
 	return new TestResult(testName, true, "");
 };
+
+function testQueueToStream() {
+	var testName = "Queue to stream";
+	
+	var initialQueue = ds_queue_create();
+	ds_queue_enqueue(initialQueue, "A", "B", "C");
+	
+	var stream = stream_of(initialQueue);
+	if (is_undefined(stream)) {
+		return new TestResult(testName, false, "Returned stream did not exist");
+	}
+	
+	// Ensure that the initial data structure still exists
+	if (!ds_exists(initialQueue, ds_type_queue)) {
+		return new TestResult(testName, false, "expected original queue to still exist after stream cleanup");
+	}
+	if (stream.count() != 3) {
+		return new TestResult(testName, false, "expected stream to contain as many elements as initial queue");
+	}
+	
+	ds_queue_destroy(initialQueue);
+	
+	return new TestResult(testName, true, "");
+}
+
+function testStackToStream() {
+	var testName = "Stack to stream";
+	
+	var initialStack = ds_stack_create();
+	ds_stack_push(initialStack, "A", "B", "C");
+	
+	var stream = stream_of(initialStack);
+	if (is_undefined(stream)) {
+		return new TestResult(testName, false, "Returned stream did not exist");
+	}
+	
+	// Ensure that the initial data structure still exists
+	if (!ds_exists(initialStack, ds_type_stack)) {
+		return new TestResult(testName, false, "expected original stack to still exist after stream cleanup");
+	}
+	if (stream.count() != 3) {
+		return new TestResult(testName, false, "expected stream to contain as many elements as initial stack");
+	}
+	
+	ds_stack_destroy(initialStack);
+	
+	return new TestResult(testName, true, "");
+}
 
 function testCollectList() {
 	var testName = "Collect to List";
@@ -389,7 +447,7 @@ failedCount = 0;
 testSuite = [testListToStream, testArrayToStream, testCollectList, testCollectArray, testDistinct, testCount, testFilter, testMap, testAllMatchTrue, testAllMatchFalse,
 			 testAnyMatchTrue, testAnyMatchFalse, testForEach, testCollectJoining, testCollectJoiningDelimiter, testCollectJoiningDelimiterPrefix, 
 			 testCollectJoiningDelimiterPrefixSuffix, testFindFirstEmpty, testFindFirst, testSort, testSortNumeric, testSortComparator, testNoneMatchTrue, 
-			 testNoneMatchFalse];
+			 testNoneMatchFalse, testQueueToStream, testStackToStream];
 show_debug_message("\nBeginning test suite\n");
 for (var i = 0; i < array_length(testSuite); i++) {
 	var test = testSuite[i];
@@ -397,7 +455,7 @@ for (var i = 0; i < array_length(testSuite); i++) {
 	try {
 		result = test();
 	} catch (_e) {
-		result = new TestResult("EXCEPTION", false, _e.message);
+		result = new TestResult("EXCEPTION", false, _e.message + "\n" + _e.longMessage);
 	}
 	totalCount += 1;
 	if (!result.passed) {
