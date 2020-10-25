@@ -6,7 +6,7 @@ Use of **gm-stream** requires GameMaker 2.3 or higher, as it makes use of many o
 
 ## Get gm-stream
 ### Manual Package Installation
-You can download the latest release of **gm-stream** from the GitHub Releases page, or from our itch.io page.
+You can download the latest release of **gm-stream** from the [GitHub Releases page](https://github.com/daikon-games/gm-stream/releases), or from our [itch.io page(https://nickavv.itch.io/gm-stream).
 
 Once you have downloaded the the package, in GameMaker Studio click on the **Tools** menu and select **Import Local Package**. Choose the `.yymps` file you downloaded, and import all assets.
 
