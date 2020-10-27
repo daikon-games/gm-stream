@@ -11,7 +11,7 @@ You can download the latest release of **gm-stream** from the [GitHub Releases p
 Once you have downloaded the the package, in GameMaker Studio click on the **Tools** menu and select **Import Local Package**. Choose the `.yymps` file you downloaded, and import all assets.
 
 ### GameMaker Marketplace
-**gm-stream** can be downloaded directly from the GameMaker Marketplace. Simply visit the Marketplace page and click the **Add to Account** button.
+**gm-stream** can be downloaded directly from the GameMaker Marketplace. Simply visit the [Marketplace page](https://marketplace.yoyogames.com/assets/9500/gm-stream) and click the **Add to Account** button.
 
 ## Using gm-stream
 ### stream_of(dataStructure)
