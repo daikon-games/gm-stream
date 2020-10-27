@@ -190,7 +190,7 @@ var result = stream_of(initialArray)
 ```
 In this example, `result` will contain `"a"`. We used a `sort` operation which would put the strings in their natural ascending order, at which point `"a"` would be the first item found in the stream.
 
-#### .fold(initialValue, foldFunction)
+### .fold(initialValue, foldFunction)
 Starting with the initial value, performs the provided fold function on each item in the stream to
 combine them into some final result.
 
