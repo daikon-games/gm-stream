@@ -73,8 +73,16 @@ Returns the number of items in the stream
 #### [.findFirst()](API.md#findFirst)
 Returns the first item encountered in the stream, or `noone` if the stream is empty
 
+#### [.fold(initialValue, foldFunction)](API.md#foldinitialvalue-foldfunction)
+Starting with the initial value, performs the provided fold function on each item in the stream to
+combine them into some final result.
+
 #### [.forEach(forEachFunction)](API.md#foreachforeachfunction)
 Executes the provided function across each item in the stream.
 
 #### [.noneMatch(predicateFunction)](API.md#nonematchpredicatefunction)
 Returns true if no items in the stream match the provided predicate function, false if one or more items do match it.
+
+#### [.reduce(foldFunction)](API.md#reducefoldfunction)
+A variation of `fold` which takes the first item encountered in the stream and uses it as the
+initial value for the folding operation.

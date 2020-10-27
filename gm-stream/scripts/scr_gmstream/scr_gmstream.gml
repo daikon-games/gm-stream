@@ -142,6 +142,15 @@ function GmStream(_data) constructor {
 		return result;
 	}
 	
+	fold = function(initialValue, foldFunction) {
+		var result = initialValue;
+		for (var i = 0; i < ds_list_size(data); i++) {
+			result = foldFunction(result, data[| i]);
+		}
+		self.clean_up();
+		return result;
+	}
+	
 	forEach = function(forEachFunction) {
 		for (var i = 0; i < ds_list_size(data); i++) {
 			var item = data[| i];
@@ -152,6 +161,19 @@ function GmStream(_data) constructor {
 	
 	noneMatch = function(predicateFunction) {
 		return !self.anyMatch(predicateFunction);
+	}
+	
+	reduce = function(foldFunction) {
+		if (ds_list_size(data) == 0) {
+			self.clean_up();
+			throw "Cannot reduce an empty stream";
+		}
+		var result = data[| 0];
+		for (var i = 1; i < ds_list_size(data); i++) {
+			result = foldFunction(result, data[| i]);
+		}
+		self.clean_up();
+		return result;
 	}
 	
 	/// Helper methods

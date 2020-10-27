@@ -1,3 +1,4 @@
+
 function TestResult(_testName, _passed, _message) constructor {
 	testName = _testName;
 	passed = _passed;
@@ -439,13 +440,66 @@ function testNoneMatchFalse() {
 	return new TestResult(testName, !result, "expected some items to match the predicate");
 }
 
+function testFold() {
+	var testName = "Fold";
+	var initialArray = [1, 2, 3, 4];
+	
+	var foldFunction = function(subtotal, item) {
+		return subtotal + item;
+	}
+	
+	var summed = stream_of(initialArray)
+					.fold(0, foldFunction);
+
+	if (summed != 10) {
+		return new TestResult(testName, false, "expected the fold function to sum the input numbers!");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testReduce() {
+	var testName = "Reduce";
+	var initialArray = [1, 2, 3, 4];
+	
+	var foldFunction = function(subtotal, item) {
+		return subtotal + item;
+	}
+	
+	var summed = stream_of(initialArray)
+					.reduce(foldFunction);
+
+	if (summed != 10) {
+		return new TestResult(testName, false, "expected the reduce function to sum the input numbers!");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testReduceEmpty() {
+	var testName = "Reduce empty stream"
+	var foldFunction = function(subtotal, item) {
+		return subtotal + item;
+	}
+	
+	try {
+		stream_of([])
+			.reduce(foldFunction);
+	} catch (_e) {
+		if (_e == "Cannot reduce an empty stream") {
+			return new TestResult(testName, true, "");
+		}
+	}
+	return new TestResult(testName, false, "expected reducing empty stream to throw an exception");
+}
+
 // Run the test suite, print out the results
 totalCount = 0;
 failedCount = 0;
 testSuite = [testListToStream, testArrayToStream, testCollectList, testCollectArray, testDistinct, testCount, testFilter, testMap, testAllMatchTrue, testAllMatchFalse,
 			 testAnyMatchTrue, testAnyMatchFalse, testForEach, testCollectJoining, testCollectJoiningDelimiter, testCollectJoiningDelimiterPrefix, 
 			 testCollectJoiningDelimiterPrefixSuffix, testFindFirstEmpty, testFindFirst, testSort, testSortNumeric, testSortComparator, testNoneMatchTrue, 
-			 testNoneMatchFalse, testQueueToStream, testStackToStream];
+			 testNoneMatchFalse, testQueueToStream, testStackToStream, testFold, testReduce, testReduceEmpty];
 show_debug_message("\nBeginning test suite\n");
 for (var i = 0; i < array_length(testSuite); i++) {
 	var test = testSuite[i];

@@ -190,6 +190,31 @@ var result = stream_of(initialArray)
 ```
 In this example, `result` will contain `"a"`. We used a `sort` operation which would put the strings in their natural ascending order, at which point `"a"` would be the first item found in the stream.
 
+#### .fold(initialValue, foldFunction)
+Starting with the initial value, performs the provided fold function on each item in the stream to
+combine them into some final result.
+
+The fold function should match the following form:
+```
+function (subtotal, item) {
+  // somehow combines the current item with the subtotal and returns that value
+}
+```
+
+**Example**
+```
+var intialArray = [1, 2, 3, 4];
+var sum = function (subtotal, item) {
+  return subtotal + item;
+}
+
+var result = stream_of(initialArray)
+              .fold(0, sum);
+```
+In this example, `result` will hold the value `10`. If we had called `.fold(5, sum)` then the resulting
+value would be `15`, as the fold function `sum` is called with the initial value to start, and then adds
+each item to that in turn.
+
 ### .forEach(forEachFunction)
 Executes the provided function across each item in the stream.
 
@@ -222,3 +247,25 @@ var result = stream_of(myArray)
                 .noneMatch(predicate);
 ```
 In this example, `result` will be true, as the stream does not contain a `4`, and `noneMatch` returns true if every item in the stream fails the predicate function. If our initial array was `[1, 2, 3, 4]` then this example would return false, as one of the items in our stream passes the predicate function.
+
+### .reduce(foldFunction)
+A variation of [`fold`](#foldinitialvalue-foldfunction) which takes the first item encountered in the stream and uses it as the initial value for the folding operation.
+
+The fold function follows the same format as `.fold` (see above), but does not require providing an initial value.
+
+Because of this, unlike `.fold`, an error will be thrown if you call `.reduce` on an empty stream. Additionally
+the resulting output type of your fold function should be the same as the data type of the stream itself,
+which is not a requirement of `.fold`.
+
+**Example**
+We can recreate the above `.fold` example using `.reduce`:
+```
+var intialArray = [1, 2, 3, 4];
+var sum = function (subtotal, item) {
+  return subtotal + item;
+}
+
+var result = stream_of(initialArray)
+              .reduce(sum);
+```
+As in that previous example, the value in `result` will be `10`.
