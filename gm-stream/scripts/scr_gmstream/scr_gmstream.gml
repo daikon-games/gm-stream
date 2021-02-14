@@ -1,45 +1,45 @@
-function GmStream(_data) constructor {
-	data = _data;
+function GmStream(_gms_data) constructor {
+	gms_data = _gms_data;
 	isDistinct = false;
 	isSorted = false;
 	
 	clean_up = function() {
-		ds_list_destroy(data);
+		ds_list_destroy(gms_data);
 	}
 	
 	/// Intermediate operations
-	/// These all process the data in some way and return our stream instance for further work
+	/// These all process the gms_data in some way and return our stream instance for further work
 	distinct = function() {
 		if (isDistinct == false) {
-			var seenItems = ds_list_create();
-			for (var i = ds_list_size(data); i >= 0; i--) {
-				var item = data[| i];
-				if (ds_list_find_index(seenItems, item) < 0) {
-					ds_list_add(seenItems, item);
+			var seengms_items = ds_list_create();
+			for (var i = ds_list_size(gms_data); i >= 0; i--) {
+				var gms_item = gms_data[| i];
+				if (ds_list_find_index(seengms_items, gms_item) < 0) {
+					ds_list_add(seengms_items, gms_item);
 				} else {
-					ds_list_delete(data, i);
+					ds_list_delete(gms_data, i);
 				}
 			}
-			ds_list_destroy(seenItems);
+			ds_list_destroy(seengms_items);
 			isDistinct = true;
 		}
 		return self;
 	}
 	
 	filter = function(filterFunction) {
-		for (var i = ds_list_size(data) - 1; i >= 0; i--) {
-			var item = data[| i];
-			if (!filterFunction(item)) {
-				ds_list_delete(data, i);
+		for (var i = ds_list_size(gms_data) - 1; i >= 0; i--) {
+			var gms_item = gms_data[| i];
+			if (!filterFunction(gms_item)) {
+				ds_list_delete(gms_data, i);
 			}
 		}
 		return self;
 	}
 	
 	map = function(mapFunction) {
-		for (var i = ds_list_size(data) - 1; i >= 0; i--) {
-			var item = data[| i];
-			data[| i] = mapFunction(item);
+		for (var i = ds_list_size(gms_data) - 1; i >= 0; i--) {
+			var gms_item = gms_data[| i];
+			gms_data[| i] = mapFunction(gms_item);
 		}
 		isDistinct = false;
 		return self;
@@ -47,12 +47,12 @@ function GmStream(_data) constructor {
 	
 	sort = function(comparatorFunction) {
 		if (is_undefined(comparatorFunction) && isSorted == false) {
-			ds_list_sort(data, true);
+			ds_list_sort(gms_data, true);
 			isSorted = true;
 		} else {
 			// Don't check or set isSorted in this case as a new comparator function could re-sort us
-			var result = self.mergesort(data, comparatorFunction);
-			ds_list_copy(data, result);
+			var result = self.mergesort(gms_data, comparatorFunction);
+			ds_list_copy(gms_data, result);
 			ds_list_destroy(result);
 		}
 		return self;
@@ -62,9 +62,9 @@ function GmStream(_data) constructor {
 	/// These all return some type of desired result, and call our clean_up method to finish
 	allMatch = function(predicateFunction) {
 		var result = true;
-		for (var i = 0; i < ds_list_size(data); i++) {
-			var item = data[| i];
-			if (!predicateFunction(item)) {
+		for (var i = 0; i < ds_list_size(gms_data); i++) {
+			var gms_item = gms_data[| i];
+			if (!predicateFunction(gms_item)) {
 				result = false;
 				break;
 			}
@@ -75,9 +75,9 @@ function GmStream(_data) constructor {
 	
 	anyMatch = function(predicateFunction) {
 		var result = false;
-		for (var i = 0; i < ds_list_size(data); i++) {
-			var item = data[| i];
-			if (predicateFunction(item)) {
+		for (var i = 0; i < ds_list_size(gms_data); i++) {
+			var gms_item = gms_data[| i];
+			if (predicateFunction(gms_item)) {
 				result = true;
 				break;
 			}
@@ -87,10 +87,10 @@ function GmStream(_data) constructor {
 	}
 	
 	collectAsArray = function() {
-		var listSize = ds_list_size(data);
+		var listSize = ds_list_size(gms_data);
 		var result = array_create(listSize);
 		for (var i = 0; i < listSize; i++) {
-			result[i] = data[| i];
+			result[i] = gms_data[| i];
 		}
 		self.clean_up();
 		return result;
@@ -98,7 +98,7 @@ function GmStream(_data) constructor {
 	
 	collectAsList = function() {
 		var result = ds_list_create();
-		ds_list_copy(result, data);
+		ds_list_copy(result, gms_data);
 		self.clean_up();
 		return result; 
 	}
@@ -110,10 +110,10 @@ function GmStream(_data) constructor {
 			result += prefix;
 		}
 		
-		var listSize = ds_list_size(data);
+		var listSize = ds_list_size(gms_data);
 		for (var i = 0; i < listSize; i++) {
-			var item = data[| i];
-			result += string(item);
+			var gms_item = gms_data[| i];
+			result += string(gms_item);
 			if (!is_undefined(delimiter) && i != listSize - 1) {
 				result += delimiter;
 			}
@@ -128,16 +128,16 @@ function GmStream(_data) constructor {
 	}
 	
 	count = function() {
-		var result = ds_list_size(data);
+		var result = ds_list_size(gms_data);
 		self.clean_up();
 		return result;
 	}
 	
 	findFirst = function() {
-		if (ds_list_size(data) == 0) {
+		if (ds_list_size(gms_data) == 0) {
 			return noone;
 		}
-		var result = data[| 0];
+		var result = gms_data[| 0];
 		self.clean_up();
 		return result;
 	}
@@ -152,9 +152,9 @@ function GmStream(_data) constructor {
 	}
 	
 	forEach = function(forEachFunction) {
-		for (var i = 0; i < ds_list_size(data); i++) {
-			var item = data[| i];
-			forEachFunction(item);
+		for (var i = 0; i < ds_list_size(gms_data); i++) {
+			var gms_item = gms_data[| i];
+			forEachFunction(gms_item);
 		}
 		self.clean_up();
 	}
@@ -224,46 +224,46 @@ function GmStream(_data) constructor {
 	}
 }
 
-/// @function stream_of(dataStructure)
-/// @param dataStructure A data-structure to be streamed
-/// @return a GmStream of the given data structure
-function stream_of(dataStructure) {
-	if (is_array(dataStructure)) {
+/// @function stream_of(gms_dataStructure)
+/// @param gms_dataStructure A gms_data-structure to be streamed
+/// @return a GmStream of the given gms_data structure
+function stream_of(gms_dataStructure) {
+	if (is_array(gms_dataStructure)) {
 		// Create a stream from an array
-		var data = ds_list_create();
-		for (var i = 0; i < array_length(dataStructure); i++) {
-			ds_list_add(data, dataStructure[i]);
+		var gms_data = ds_list_create();
+		for (var i = 0; i < array_length(gms_dataStructure); i++) {
+			ds_list_add(gms_data, gms_dataStructure[i]);
 		}
-		return new GmStream(data);
-	} else if (ds_exists(dataStructure, ds_type_list)) {
+		return new GmStream(gms_data);
+	} else if (ds_exists(gms_dataStructure, ds_type_list)) {
 		// Create a stream from a ds_list
-		var data = ds_list_create();
-		ds_list_copy(data, dataStructure);
-		return new GmStream(data);
-	} else if (ds_exists(dataStructure, ds_type_queue)) {
+		var gms_data = ds_list_create();
+		ds_list_copy(gms_data, gms_dataStructure);
+		return new GmStream(gms_data);
+	} else if (ds_exists(gms_dataStructure, ds_type_queue)) {
 		// Create a stream from a ds_queue
-		var data = ds_list_create();
+		var gms_data = ds_list_create();
 		var tempQueue = ds_queue_create();
-		ds_queue_copy(tempQueue, dataStructure);
-		var item = ds_queue_dequeue(tempQueue);
-		while (!is_undefined(item)) {
-			ds_list_add(data, item);
-			item = ds_queue_dequeue(tempQueue);
+		ds_queue_copy(tempQueue, gms_dataStructure);
+		var gms_item = ds_queue_dequeue(tempQueue);
+		while (!is_undefined(gms_item)) {
+			ds_list_add(gms_data, gms_item);
+			gms_item = ds_queue_dequeue(tempQueue);
 		}
 		ds_queue_destroy(tempQueue);
-		return new GmStream(data);
-	} else if (ds_exists(dataStructure, ds_type_stack)) {
+		return new GmStream(gms_data);
+	} else if (ds_exists(gms_dataStructure, ds_type_stack)) {
 		// Create a stream from a ds_stack
-		var data = ds_list_create();
+		var gms_data = ds_list_create();
 		var tempStack = ds_stack_create();
-		ds_stack_copy(tempStack, dataStructure);
-		var item = ds_stack_pop(tempStack);
-		while (!is_undefined(item)) {
-			ds_list_add(data, item);
-			item = ds_stack_pop(tempStack);
+		ds_stack_copy(tempStack, gms_dataStructure);
+		var gms_item = ds_stack_pop(tempStack);
+		while (!is_undefined(gms_item)) {
+			ds_list_add(gms_data, gms_item);
+			gms_item = ds_stack_pop(tempStack);
 		}
 		ds_stack_destroy(tempStack);
-		return new GmStream(data);
+		return new GmStream(gms_data);
 	}
 }
 
