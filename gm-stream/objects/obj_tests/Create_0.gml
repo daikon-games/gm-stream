@@ -376,6 +376,36 @@ function testSort() {
 	return new TestResult(testName, true, "");
 }
 
+function testSortEmptyList() {
+	var testName = "Sort Empty List";
+	var initialArray = [];
+	
+	var result = stream_of(initialArray)
+					.sort()
+					.collectJoining();
+					
+	if (result != "") {
+		return new TestResult(testName, false, "expected result to be empty");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
+function testSortMonoList() {
+	var testName = "Sort Mono List";
+	var initialArray = ["A"];
+	
+	var result = stream_of(initialArray)
+					.sort()
+					.collectJoining();
+					
+	if (result != "A") {
+		return new TestResult(testName, false, "expected result to be same as input");
+	}
+	
+	return new TestResult(testName, true, "");
+}
+
 function testSortNumeric() {
 	var testName = "Sort Simple (Numeric)";
 	var initialArray = [3, 1, 20];
@@ -498,7 +528,7 @@ totalCount = 0;
 failedCount = 0;
 testSuite = [testListToStream, testArrayToStream, testCollectList, testCollectArray, testDistinct, testCount, testFilter, testMap, testAllMatchTrue, testAllMatchFalse,
 			 testAnyMatchTrue, testAnyMatchFalse, testForEach, testCollectJoining, testCollectJoiningDelimiter, testCollectJoiningDelimiterPrefix, 
-			 testCollectJoiningDelimiterPrefixSuffix, testFindFirstEmpty, testFindFirst, testSort, testSortNumeric, testSortComparator, testNoneMatchTrue, 
+			 testCollectJoiningDelimiterPrefixSuffix, testFindFirstEmpty, testFindFirst, testSort, testSortEmptyList, testSortMonoList,  testSortNumeric, testSortComparator, testNoneMatchTrue, 
 			 testNoneMatchFalse, testQueueToStream, testStackToStream, testFold, testReduce, testReduceEmpty];
 show_debug_message("\nBeginning test suite\n");
 for (var i = 0; i < array_length(testSuite); i++) {

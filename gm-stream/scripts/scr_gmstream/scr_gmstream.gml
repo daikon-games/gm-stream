@@ -46,14 +46,16 @@ function GmStream(_gms_data) constructor {
 	}
 	
 	sort = function(comparatorFunction) {
-		if (is_undefined(comparatorFunction) && isSorted == false) {
-			ds_list_sort(gms_data, true);
-			isSorted = true;
-		} else {
-			// Don't check or set isSorted in this case as a new comparator function could re-sort us
-			var result = self.mergesort(gms_data, comparatorFunction);
-			ds_list_copy(gms_data, result);
-			ds_list_destroy(result);
+		if (ds_list_size(gms_data) > 1) {
+			if (is_undefined(comparatorFunction) && isSorted == false) {
+				ds_list_sort(gms_data, true);
+				isSorted = true;
+			} else {
+				// Don't check or set isSorted in this case as a new comparator function could re-sort us
+				var result = self.mergesort(gms_data, comparatorFunction);
+				ds_list_copy(gms_data, result);
+				ds_list_destroy(result);
+			}
 		}
 		return self;
 	}
@@ -144,8 +146,8 @@ function GmStream(_gms_data) constructor {
 	
 	fold = function(initialValue, foldFunction) {
 		var result = initialValue;
-		for (var i = 0; i < ds_list_size(data); i++) {
-			result = foldFunction(result, data[| i]);
+		for (var i = 0; i < ds_list_size(gms_data); i++) {
+			result = foldFunction(result, gms_data[| i]);
 		}
 		self.clean_up();
 		return result;
@@ -164,13 +166,13 @@ function GmStream(_gms_data) constructor {
 	}
 	
 	reduce = function(foldFunction) {
-		if (ds_list_size(data) == 0) {
+		if (ds_list_size(gms_data) == 0) {
 			self.clean_up();
 			throw "Cannot reduce an empty stream";
 		}
-		var result = data[| 0];
-		for (var i = 1; i < ds_list_size(data); i++) {
-			result = foldFunction(result, data[| i]);
+		var result = gms_data[| 0];
+		for (var i = 1; i < ds_list_size(gms_data); i++) {
+			result = foldFunction(result, gms_data[| i]);
 		}
 		self.clean_up();
 		return result;
